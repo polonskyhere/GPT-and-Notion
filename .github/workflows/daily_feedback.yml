@@ -1,0 +1,24 @@
+name: Daily Mentor Feedback
+on:
+  schedule:
+    - cron: '0 20 * * *'   # 20:00 UTC = 23:00 Kyiv
+  workflow_dispatch: {}
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: node index.mjs
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ secrets.OPENAI_MODEL }}
+          REFLECTION_DB_ID: ${{ secrets.REFLECTION_DB_ID }}
+          REFLECTION_DATE_PROP: ${{ secrets.REFLECTION_DATE_PROP }}
+          REFLECTION_TITLE_PROP: ${{ secrets.REFLECTION_TITLE_PROP }}
+          MENTEE_RELATION_PROP: ${{ secrets.MENTEE_RELATION_PROP }}
+          MENTEE_PAGE_ID: ${{ secrets.MENTEE_PAGE_ID }}
